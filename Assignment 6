@@ -5,47 +5,53 @@ import collatz.CollatzCalculatorGrpc;
 import collatz.CollatzRequest;
 import collatz.CollatzResponse;
 
-public class CollatzCalculatorServer {
+public class CollatzCalServer
+{
     private final int port;
     private final Server server;
 
-    public CollatzCalculatorServer(int port) {
+    public CollatzCalServer(int port) 
+{
         this.port = port;
         this.server = ServerBuilder.forPort(port)
-                .addService(new CollatzCalculatorImpl())
+                .addService(new CollatzCalImpl())
                 .build();
     }
 
-    public void start() throws Exception {
+    public void start() throws Exception 
+{
         server.start();
         System.out.println("Server started, listening on " + port);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.err.println("*** shutting down gRPC server since JVM is shutting down");
-            CollatzCalculatorServer.this.stop();
+         
             System.err.println("*** server shut down");
         }));
     }
 
     public void stop() {
-        if (server != null) {
+        //if statement to check sever != null
+        if (server != null) 
+        {
             server.shutdown();
         }
     }
 
-    private static class CollatzCalculatorImpl extends CollatzCalculatorGrpc.CollatzCalculatorImplBase {
+    private static class CollatzCalImpl extends CollatzCalGrpc.CollatzCalImplBase {
         @Override
         public void calculateCollatzSequence(CollatzRequest request, StreamObserver<CollatzResponse> responseObserver) {
             CollatzResponse.Builder responseBuilder = CollatzResponse.newBuilder();
             for (int number : request.getNumbers()) {
-                String sequence = calculateCollatzSequence(number);
+                String sequence = calCollatzSequence(number);
                 responseBuilder.addSequences(sequence);
             }
             responseObserver.onNext(responseBuilder.build());
             responseObserver.onCompleted();
         }
 
-        private String calculateCollatzSequence(int n) {
-            StringBuilder sequence = new StringBuilder();
+        private String calCollatzSe(int n) 
+            {
+            StringBuilder sequence = new StringBuild();
             sequence.append(n);
             while (n != 1) {
                 if (n % 2 == 0) {
@@ -59,10 +65,11 @@ public class CollatzCalculatorServer {
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception 
+    {
         int port = 50051;
-        CollatzCalculatorServer server = new CollatzCalculatorServer(port);
+        CollatzCalServer server = new CollatzCalServer(port);
         server.start();
-        server.server.awaitTermination();
+        server.server.awaitTerm();
     }
 }
