@@ -1,0 +1,44 @@
+public class ComptrEngineBenchMark
+{
+    private ComptrEngine ComptrEngine;
+}
+public void setup()
+{
+    computeEngine = new ComputeEngine();
+}
+public void benchmarkComputer()
+{
+//Define the number of average result
+int iteration = 100;
+
+setup();
+
+//measure time
+long StartTime = system.currentTimeM();
+
+// For loop
+for(int i= 0; i < iterations; i++)
+{
+    comptrEngine.performCalculator();
+}
+long EndTime = System.curTimeMillis();
+        long TotalTime = EndTime - StartTime;
+
+        // Calculate average 
+        double AverageTime = (double) TotalTime / iterations;
+
+        System.out.printf("Average time per iteration: %.3f ms\n", averageTime);
+    }
+
+    public static void main(String[] args) {
+    
+        ComptreEngineBenchmark benchmark = new ComptrEngineBenchmark();
+        benchmark.benchmarkComptr();
+    }
+}
+
+
+
+
+
+
