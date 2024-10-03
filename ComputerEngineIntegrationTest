@@ -1,0 +1,36 @@
+package test;
+import org.junit.Test;
+import collatz.src.InputConfig;
+import collatz.src.OutputConfig;
+import static org.junit.Assert.assertEquals;
+import java.util.List;
+
+public class ComputeEngineIntegrationTest {
+
+    @Test
+    public void testComputeEngineIntegration() {
+        // Step 1: Create test input data
+        int[] inputData = {1, 10, 25};
+        
+        // Step 2: Initialize test-only input and output configurations
+        InputConfig inputConfig = new TestInputConfig();
+        OutputConfig outputConfig = new TestOutputConfig();
+        
+        // Step 3: Set the test input data to the input configuration
+        inputConfig.setInputData(inputData);
+        
+        // Step 4: Initialize the test-only data store with the input and output configurations
+        DataStore dataStore = (DataStore) new TestDataStore(inputConfig, outputConfig);
+        
+        // Step 5: Process data using the test-only data store
+        dataStore.processData();
+        
+        // Step 6: Get the output data from the output configuration
+        List<String> outputData = ((TestOutputConfig) outputConfig).getOutputData();
+        
+        // Step 7: Validate the output data
+        // For this example, let's assume the compute engine will eventually concatenate input integers
+        String expectedOutput = "1,10,25"; // Expected output based on the assumed compute engine logic
+        
+        assertEquals(expectedOutput, String.join(",", outputData));
+    }
