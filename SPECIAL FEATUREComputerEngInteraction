@@ -1,0 +1,48 @@
+package collatz.src;
+
+public class CollatzComputeEngine {
+
+    private CollatzDatabase database = new CollatzDatabase();
+
+    // Calculate the length of the Collatz sequence for a given number n
+    public int collatzLength(long n) {
+        // First check if the result is in the database
+        Integer stoResult = database.getCollatzLength(n);
+        if (stoResult != null) {
+            return stoResult;
+        }
+
+        long original = n;
+        int count = 1;
+
+        // Loop to count if n is even
+        while (n != 1) {
+            if (n % 2 == 0) {
+                n = n / 2;
+            } else {
+                n = 3 * n + 1;
+            }
+            count++;
+        }
+
+        // Store the result in the database
+        database.insertResult(original, count);
+        return count;
+    }
+
+    public long findLongestCollatz(long limit) {
+        long LongestSequenceNumber = 0;
+        int longestLength = 0;
+
+        for (long i = 1; i <= limit; i++) {
+            int length = collatzLength(i);
+
+            if (length > longestLength) {
+                longestLength = length;
+                LongestSequenceNumber = i;
+            }
+        }
+
+        return LongestSequenceNumber;
+    }
+}
