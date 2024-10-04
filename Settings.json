@@ -1,0 +1,13 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "Mockito-jars\\byte-buddy-agent-1.14.11.jar",
+        "Mockito-jars\\mockito-core-5.10.0.jar",
+        "Mockito-jars\\objenesis-3.3.jar",
+        "Mockito-jars\\byte-buddy-1.14.11.jar"
+    ],
+    "java.project.sourcePaths": [
+        "."
+    ],
+    "java.debug.settings.onBuildFailureProceed": true
+}
