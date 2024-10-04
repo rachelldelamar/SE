@@ -1,0 +1,73 @@
+// Stattistical Prediction
+// This program creates a database of the memory it collects from the collatz calculator
+// the purpose of this database is to provide the user with potential
+// results from previously inputs from other users
+//Will be utilize mySQL for database
+package collatz.src;
+import java.sql.*;
+
+public class CollatzDatabase {
+
+    private static final String URL = "jdbc:sqlite:collatz.db";
+
+    public CollatzDatabase() {
+        // Initialize the database
+        createTable();
+    }
+
+    // Create table if it doesn't exist
+    private void createTable() {
+        String sql = create table if not exists collatz_results (
+    id integer primary key,
+    number long not null unique,
+    sequence_length integer not null,
+    timestamp datetime default current_timestamp);";
+
+        try (Connection con = connect(); Statement stmt = con.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println("Error table: " + e.getMessage());
+        }
+    }
+
+    // Connect to the mySQL database
+    private Connection connect() {
+        try {
+            return Manag.getConnection(URL);
+        } catch (SQLException e) {
+            System.out.println("Connection error: " + e.getMessage());
+            return null;
+        }
+    }
+
+    // Check if the result is stored
+    public Integer getCollatzLength(long number) {
+        String sql = "select sequence_length from collatz_results where number = ?";
+
+        try (Connection con = connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setLong(1, number);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getInt("sequence_length");
+            }
+        } catch (SQLException e) {
+            System.out.println("Query error: " + e.getMessage());
+        }
+        return null; // Return null if not found
+    }
+
+    // Insert new result into the database
+    public void insertResult(long number, int sequenceLength) {
+        String sql = "INSERT INTO collatz_results (number, sequence_length) VALUES (?, ?)";
+
+        try (Connection con = connect(); PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setLong(1, number);
+            pstmt.setInt(2, sequenceLength);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Insert error: " + e.getMessage());
+        }
+    }
+}
