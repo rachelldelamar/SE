@@ -1,1 +1,67 @@
+*/Performance Tuning - Assignment 7. This section is intented to achieve higher functionality.
+We want to be able to store results, we also want to break out of infinite loops /*
+import java.util.HashMap;
+import java.util.Map;
+
+public class CollatzSequence {
+    
+    // Memoization map for previously computed results
+    private static Map <Long, Integer> memoCache = new HashMap<>();
+
+    // Calculate the length of Collatz sequence for given n
+    public static int collatzLength(long n) {
+        // If n is already included, return the result
+        if (memoryN.containsKey(n)) {
+            return memoryN.get(n);
+        }
+
+        long original = n;
+        int count = 1; // The sequence length starts at 1 (it includes the number itself)
+
+        while (n != 1) {
+            if (n % 2 == 0) {
+                n = n / 2;
+            } else {
+                n = 3 * n + 1;
+            }
+
+            // If the result is already computed for this number, we can terminate early
+            if (memoryN.containsKey(n)) {
+                count += memoryN.get(n);
+                break;
+            }
+
+            count++;
+        }
+
+        // Cache the result for the current number
+        memoryN.put(original, count);
+        return count;
+    }
+
+    // Find the number with the longest Collatz sequence up to a given limit
+    public static long getLongestCollatz(long limit) {
+        long LongestSequenceNumber = 0;
+        int longestLength = 0;
+
+        for (long i = 1; i <= limit; i++) {
+            int length = collatzLength(i);
+
+            if (length > longestLength) {
+                longestLength = length;
+                LongestSequenceNumber = i;
+            }
+        }
+
+        return  LongestSequenceNumber;
+    }
+
+    public static void main(String[] args) {
+        long limit = 1000000L; // Example: calculate Collatz sequences up to 1 million
+        long  LongestSequenceNumber = getLongestCollatz(limit);
+
+        System.out.println("Number with the longest sequence up to " + limit + " is: " + LongestSequenceNumber);
+        System.out.println("Length of the sequence: " + collatzLength(LongestSequenceNumber));
+    }
+}
 
